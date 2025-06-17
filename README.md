@@ -3,7 +3,7 @@
 This project is a Python-based security system that uses facial recognition to detect and identify individuals. When an unknown person is detected, the system sends an alert message and stores the record in the database. It is ideal for enhancing home or workplace security using OpenCV and Python.
 
 🔍 Features
-Real-time facial recognition using OpenCV and LBPH algorithm
+Real-time facial recognition using OpenCV algorithm
 
 Capture and register new faces via GUI
 
