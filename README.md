@@ -26,32 +26,7 @@ Database: SQLite
 
 Libraries: OpenCV, NumPy
 
-📁 Project Structure
-pgsql
-Copy
-Edit
-Facial-Recognition-Security-Alert-System/
-├── main.py
-├── train.py
-├── dataset/
-├── recognizer/
-├── templates/
-│   ├── index.html
-│   ├── login.html
-│   └── register.html
-├── static/
-│   ├── css/
-│   └── images/
-└── requirements.txt
-🚀 Getting Started
-Clone the repository:
-
-bash
-Copy
-Edit
-git clone https://github.com/Maraganimadhu/Facial-Recognition-Security-Alert-System.git
-cd Facial-Recognition-Security-Alert-System
-Install dependencies:
+#Install dependencies:
 
 bash
 Copy
