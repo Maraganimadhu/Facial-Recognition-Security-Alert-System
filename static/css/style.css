@@ -1,0 +1,140 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Body styling */
+body {
+    background-image: url(bg.png);
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* Headings */
+h1 {
+    color: #efefef;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    text-align: center;
+}
+
+
+
+
+/* Input fields */
+input[type="text"] {
+    width: 28%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+/* Buttons */
+button {
+    background-color: #00750e;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+ 
+    margin: 10px 0;
+    background-size:cover;
+}
+
+button:hover {
+    background-color: #003e03;
+}
+
+/* Message styling */
+#message {
+    margin: 15px 0;
+    font-size: 1rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+#message[style*="color: green"] {
+    color: #27ae60;
+}
+
+#message[style*="color: red"] {
+    color: #e74c3c;
+}
+
+/* Progress bar */
+#progressBar {
+    width: 100%;
+    background-color: #ddd;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+#progress {
+    height: 100%;
+    background-color: #2ecc71;
+    transition: width 0.3s ease;
+}
+
+/* Progress text */
+#progressText {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Video and snapshot */
+#video, #snapshot {
+    display: block;
+    margin: 20px auto;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#videoCanvas {
+    display: none;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    button, input[type="text"] {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    #video, #snapshot {
+        width: 100%;
+        height: auto;
+    }
+}

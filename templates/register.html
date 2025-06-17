@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register User</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url(static/css/bg.png);
+            background-size: cover;
+    background-repeat: no-repeat;
+        }
+        h1 {
+            color: white;
+        }
+        #video {
+            border: 2px solid #333;
+            margin: 10px;
+        }
+        #canvas {
+            display: none;
+        }
+        .form-group {
+            margin: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #status {
+            color: #c2ccd1;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Register New User</h1>
+    <div class="form-group">
+        <input type="text" id="id" placeholder="Enter ID" required>
+        <input type="text" id="name" placeholder="Enter Name" required>
+    </div>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas"></canvas>
+    <button onclick="startCapture()">Start Capture</button>
+    <p id="status">Please enter ID and name, then start capturing face images.</p>
+ 
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const idInput = document.getElementById('id');
+        const nameInput = document.getElementById('name');
+        const status = document.getElementById('status');
+        let capturing = false;
+        let batchNum = 0;
+        let images = [];
+    
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+            })
+            .catch(err => {
+                status.textContent = 'Error accessing webcam: ' + err;
+            });
+    
+        function startCapture() {
+            if (!idInput.value || !nameInput.value) {
+                status.textContent = 'Please enter both ID and name.';
+                return;
+            }
+            if (capturing) return;
+            capturing = true;
+            status.textContent = 'Capturing... Position your face centrally, 2-3 feet from the camera, with bright, even lighting.';
+            captureBatch();
+        }
+    
+        function captureBatch() {
+            if (!capturing) return;
+            images = [];
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    images.push(canvas.toDataURL('image/jpeg', 0.7));
+                    if (i === 9) sendBatch();
+                }, i * 200);
+            }
+        }
+    
+        function sendBatch() {
+            if (!capturing) return;
+    
+            const formData = new FormData();
+            formData.append('id', idInput.value);
+            formData.append('name', nameInput.value);
+            formData.append('batch_num', batchNum);
+            images.forEach((img, index) => {
+                formData.append('images[]', img);
+            });
+    
+            console.log('Batch image 0:', images[0].substring(0, 50)); // Log for debugging
+    
+            fetch('/register_batch', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    status.textContent = `Error: ${data.error}`;
+                    capturing = false;
+                    return;
+                }
+                status.textContent = `Batch ${batchNum} processed. Total samples: ${data.total_samples || 0}`;
+                if (data.complete) {
+                    status.textContent = 'Registration complete!';
+                    capturing = false;
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                } else {
+                    batchNum++;
+                    setTimeout(captureBatch, 1000);
+                }
+            })
+            .catch(err => {
+                status.textContent = `Network error: ${err}. Please try again.`;
+                capturing = false;
+            });
+        }
+    </script>
